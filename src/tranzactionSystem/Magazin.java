@@ -33,4 +33,8 @@ public abstract class Magazin implements IMagazin {
 	public double calculScutiriTaxe(){
 		return 0;
 	}
+	
+	public String toString(){
+		return nume + " " + lista;
+	}
 }

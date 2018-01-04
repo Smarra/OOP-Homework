@@ -7,7 +7,7 @@ public class MediumMarket extends Magazin{
 	}
 
 	public String toString(){
-		return "MediumMarket " + nume;
+		return "MediumMarket " + nume + " " + lista;
 	}
 	
 }

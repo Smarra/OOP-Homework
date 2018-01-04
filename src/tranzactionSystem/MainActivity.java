@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 public class MainActivity {
 	public static void main(String args[]){
@@ -57,8 +58,24 @@ public class MainActivity {
 			{
 				String line = input.nextLine();
 				StringTokenizer items = new StringTokenizer(line);
-			}
-			
+				String categorie = items.nextToken();
+				
+				int i = 0;
+				while( items.hasMoreTokens() )
+				{
+					Double procent = Double.parseDouble( items.nextToken() );
+					String tara = tari.get(i++);
+					if( gestiune.taxe.containsKey(tara) )
+						gestiune.taxe.get(tara).put(categorie, procent);
+					else
+					{
+						TreeMap<String, Double> map = new TreeMap<String, Double>();
+						map.put(categorie, procent);
+						gestiune.taxe.put(tara, map);
+					}
+				}
+			}			
+			input.close();
 			
 			//parcurgem lista de facturi
 			ProductFactory productFactory = new ProductFactory();
@@ -80,12 +97,35 @@ public class MainActivity {
 					gestiune.magazine.add(newMagazin);
 				}
 				
-				if( line.startsWith("Factura") ){
+				if( line.startsWith("Factura") )
+				{
 					Factura factura = new Factura();
 					factura.denumire = line;
+					input.nextLine();
+					
+					while(input.hasNextLine())
+					{
+						line = input.nextLine();
+						if( line.compareTo("") == 0 )
+							break;
+						StringTokenizer items = new StringTokenizer(line);
+						String denumire = items.nextToken();
+						String tara = items.nextToken();
+						int cantitate = Integer.parseInt(items.nextToken());
+						for( Produs prod : gestiune.produse )
+							if( prod.getDenumire().equals(denumire) && prod.getTaraOrigine().equals(tara))
+							{
+								Produs produs = new Produs(prod);
+								double taxa = gestiune.taxe.get(tara).get(produs.getCategorie());
+								ProdusComandat prodCom = new ProdusComandat(produs, taxa, cantitate);
+								factura.lista.addElement(prodCom);
+								break;
+							}
+						}
+					gestiune.magazine.get(gestiune.magazine.size()-1).lista.addElement(factura);
+					
 				}
 			}
-			
 			System.out.println(gestiune.magazine);
 			
 		}catch(Exception e){

@@ -13,6 +13,13 @@ public class Produs {
 		this.pret = pret;
 	}
 	
+	public Produs(Produs prod){
+		this.denumire = prod.denumire;
+		this.categorie = prod.categorie;
+		this.taraOrigine = prod.taraOrigine;
+		this.pret = prod.pret;
+	}
+	
 	void setDenumire(String denumire){
 		this.denumire = denumire;
 	}
@@ -43,10 +50,6 @@ public class Produs {
 	
 	double getPret(){
 		return pret;
-	}
-	
-	public Produs(){
-		
 	}
 	
 	public String toString(){

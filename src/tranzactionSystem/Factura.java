@@ -25,4 +25,8 @@ public class Factura {
 	double getTaxeTara(String tara){
 		return 0;
 	}
+	
+	public String toString(){
+		return denumire + " " + lista;
+	}
 }

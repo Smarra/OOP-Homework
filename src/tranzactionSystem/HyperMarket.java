@@ -7,7 +7,7 @@ public class HyperMarket extends Magazin{
 	}
 	
 	public String toString(){
-		return "HyperMarket " + nume;
+		return "HyperMarket " + nume + " " + lista;
 	}
 	
 }

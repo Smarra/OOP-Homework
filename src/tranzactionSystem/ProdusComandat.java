@@ -5,6 +5,12 @@ public class ProdusComandat {
 	private double taxa;
 	private int cantitate;
 	
+	public ProdusComandat(Produs produs, double taxa, int cantitate){
+		this.produs = new Produs(produs);
+		this.taxa = taxa;
+		this.cantitate = cantitate;
+	}
+	
 	void setProdus(Produs produs){
 		this.produs = produs;
 	}
@@ -27,5 +33,9 @@ public class ProdusComandat {
 	
 	int getCantitate(){
 		return cantitate;
+	}
+	
+	public String toString(){
+		return " Taxa:" + taxa + " Cantitate:" + cantitate;
 	}
 }

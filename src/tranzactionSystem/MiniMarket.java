@@ -7,6 +7,6 @@ public class MiniMarket extends Magazin{
 	}
 	
 	public String toString(){
-		return "MiniMarket " + nume;
+		return "MiniMarket " + nume + " " + lista;
 	}
 }

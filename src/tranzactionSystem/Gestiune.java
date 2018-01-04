@@ -6,6 +6,7 @@ public class Gestiune {
 	public static Gestiune gestiune = new Gestiune();
 	public ArrayList<Produs> produse = new ArrayList<>();
 	public ArrayList<Magazin> magazine = new ArrayList<>();
+	public ArrayList<Factura> facturi = new ArrayList<>(); 
 	public TreeMap<String, TreeMap<String, Double>> taxe = new TreeMap<>();
 	
 	private Gestiune(){}
