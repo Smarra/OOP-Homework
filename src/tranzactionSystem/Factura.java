@@ -3,8 +3,8 @@ package tranzactionSystem;
 import java.util.Vector;
 
 public class Factura {
-	String denumire;
-	Vector<ProdusComandat> lista;
+	public String denumire;
+	public Vector<ProdusComandat> lista = new Vector<ProdusComandat>();
 	
 	double getTotalFaraTaxe(){
 		return 0.0;

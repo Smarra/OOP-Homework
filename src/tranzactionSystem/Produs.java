@@ -6,6 +6,13 @@ public class Produs {
 	private String taraOrigine;
 	private double pret;
 	
+	public Produs(String denumire, String categorie, String taraOrigine, double pret){
+		this.denumire = denumire;
+		this.categorie = categorie;
+		this.taraOrigine = taraOrigine;
+		this.pret = pret;
+	}
+	
 	void setDenumire(String denumire){
 		this.denumire = denumire;
 	}
@@ -40,5 +47,9 @@ public class Produs {
 	
 	public Produs(){
 		
+	}
+	
+	public String toString(){
+		return denumire + " " + categorie + " " + taraOrigine + " " + pret;
 	}
 }
