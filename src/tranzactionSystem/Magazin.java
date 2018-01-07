@@ -2,36 +2,49 @@ package tranzactionSystem;
 
 import java.util.Vector;
 
-public abstract class Magazin implements IMagazin {
+public abstract class Magazin implements IMagazin, Comparable<Object> {
 	public String nume;
+	public String tip;
 	public Vector<Factura> lista = new Vector<Factura>();
 	
+	public Magazin(String tip){
+		this.tip = tip;
+	}
+	
 	public double getTotalFaraTaxe(){
-		return 0;
+		double total = 0;
+		for( Factura fact : lista )
+			total += fact.getTotalFaraTaxe();
+		return total;
 	}
 	
 	public double getTotalCuTaxe(){
-		return 0;
+		double total = 0;
+		for( Factura fact : lista )
+			total += fact.getTotalCuTaxe();
+		return total;
 	}
 	
 	public double getTotalCuTaxeScutite(){
-		return 0;
+		return getTotalCuTaxe() * (100 - calculScutiriTaxe())/100 ;
 	}
 	
 	public double getTotalTaraFaraTaxe(String tara){
-		return 0;
+		double total = 0;
+		for( Factura fact : lista )
+			total += fact.getTotalTaraFaraTaxe(tara);
+		return total;
 	}
 	
 	public double getTotalTaraCuTaxe(String tara){
-		return 0;
+		double total = 0;
+		for( Factura fact : lista )
+			total += fact.getTotalTaraCuTaxe(tara);
+		return total;
 	}
 	
 	public double getTotalTaraCuTaxeScutite(String tara){
-		return 0;
-	}
-	
-	public double calculScutiriTaxe(){
-		return 0;
+		return getTotalTaraCuTaxe(tara) * (100 - calculScutiriTaxe())/100 ;
 	}
 	
 	public String toString(){

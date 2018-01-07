@@ -1,10 +1,14 @@
 package tranzactionSystem;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+
+import javaSwing.*;
 
 public class MainActivity {
 	public static void main(String args[]){
@@ -13,13 +17,15 @@ public class MainActivity {
 		Scanner input;
 		Gestiune gestiune = Gestiune.getInstance();
 		
+		new FereastraLogin("Login").setVisible(true);
+		//new FereastraPrincipala("maind").show();
+		
 		try{		
 			//Folosim utilitarul Scanner pentru parcurgerea fisierului
 			file = new File("produse");
 			input = new Scanner(file);
 			
 			//Obtin lista tarilor din prima linie din fisier
-			ArrayList<String> tari = new ArrayList<String>();
 			if( input.hasNextLine() )
 			{
 				StringTokenizer line = new StringTokenizer(input.nextLine());
@@ -28,7 +34,7 @@ public class MainActivity {
 				while( line.hasMoreElements() )
 				{
 					String tara = new String( line.nextToken() );
-					tari.add(tara);
+					gestiune.tari.add(tara);
 				}
 			}
 			
@@ -44,7 +50,7 @@ public class MainActivity {
 				while( line.hasMoreTokens() )
 				{
 					Double pret = Double.parseDouble( line.nextToken() );
-					Produs prod = new Produs(denumire, categorie, tari.get(i++), pret);
+					Produs prod = new Produs(denumire, categorie, gestiune.tari.get(i++), pret);
 					gestiune.produse.add( prod );
 				}
 			}
@@ -64,7 +70,7 @@ public class MainActivity {
 				while( items.hasMoreTokens() )
 				{
 					Double procent = Double.parseDouble( items.nextToken() );
-					String tara = tari.get(i++);
+					String tara = gestiune.tari.get(i++);
 					if( gestiune.taxe.containsKey(tara) )
 						gestiune.taxe.get(tara).put(categorie, procent);
 					else
@@ -126,9 +132,56 @@ public class MainActivity {
 					
 				}
 			}
-			System.out.println(gestiune.magazine);
+			//System.out.println(gestiune.produse);
 			
 		}catch(Exception e){
+			e.printStackTrace();
+		}
+	
+		//trecem la creearea fisierului out.txt
+		try{
+			file = new File("out");
+			PrintWriter writer = new PrintWriter(file, "UTF-8");
+	
+			//Sortam magazinele dupa costul total ale acestora
+			Collections.sort(gestiune.magazine);
+			ArrayList<String> tipuri = new ArrayList<>();
+			tipuri.add("MiniMarket");
+			tipuri.add("MediumMarket");
+			tipuri.add("HyperMarket");
+			
+			Collections.sort(gestiune.tari);
+			for( String tip : tipuri )
+			{
+				writer.println(tip);
+				for( Magazin magazin : gestiune.magazine )
+				{
+					if( magazin.tip == tip )
+					{
+						writer.println(magazin.nume + "\n");
+						writer.println("Total " + magazin.getTotalFaraTaxe() + " " + magazin.getTotalCuTaxe() + " " + 
+										magazin.getTotalCuTaxeScutite() + "\n");
+						writer.println("Tara");
+						for( String tara : gestiune.tari )
+							writer.println(tara + " " + magazin.getTotalTaraFaraTaxe(tara) + " " +
+										magazin.getTotalTaraCuTaxe(tara) + " " + magazin.getTotalTaraCuTaxeScutite(tara));
+						writer.println();
+						for( Factura fact : magazin.lista )
+						{
+							writer.println( fact.denumire + "\n");
+							writer.println( "Total " + fact.getTotalFaraTaxe() + " " + fact.getTotalCuTaxe() + "\n");
+							writer.println("Tara");
+							for( String tara : gestiune.tari )
+								writer.println(tara + " " + fact.getTotalTaraFaraTaxe(tara) + " " + fact.getTotalTaraCuTaxe(tara));
+							writer.println();
+						}
+					}
+				}
+			}
+			
+			writer.close();
+			
+		}catch( Exception e ){
 			e.printStackTrace();
 		}
 	}
