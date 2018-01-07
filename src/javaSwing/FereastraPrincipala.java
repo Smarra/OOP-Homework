@@ -32,7 +32,7 @@ public class FereastraPrincipala extends JFrame {
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		        new FereastraPrincipala("Daa").setVisible(true);
+		        new IncarcareFisiere("Incarcare Fisiere").setVisible(true);
 		    }
 		});
 		panel.add( btn1 );

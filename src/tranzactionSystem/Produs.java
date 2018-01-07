@@ -20,35 +20,35 @@ public class Produs {
 		this.pret = prod.pret;
 	}
 	
-	void setDenumire(String denumire){
+	public void setDenumire(String denumire){
 		this.denumire = denumire;
 	}
 	
-	String getDenumire(){
+	public String getDenumire(){
 		return denumire;
 	}
 	
-	void setCategorie(String categorie){
+	public void setCategorie(String categorie){
 		this.categorie = categorie;
 	}
 	
-	String getCategorie(){
+	public String getCategorie(){
 		return categorie;
 	}
 	
-	void setTaraOrigine(String taraOrigine){
+	public void setTaraOrigine(String taraOrigine){
 		this.taraOrigine = taraOrigine;
 	}
 	
-	String getTaraOrigine(){
+	public String getTaraOrigine(){
 		return taraOrigine;
 	}
 	
-	void setPret(double pret){
+	public void setPret(double pret){
 		this.pret = pret;
 	}
 	
-	double getPret(){
+	public double getPret(){
 		return pret;
 	}
 	

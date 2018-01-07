@@ -127,8 +127,13 @@ public class FereastraLogin extends JFrame{
 				String utilizator = scanner.nextLine();
 				String par = scanner.nextLine();
 				if( utilizator.equals(username) && parola.equals(par) )
+				{
+					scanner.close();
 					return true;
+				}
 			}
+			scanner.close();
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
