@@ -29,12 +29,15 @@ import tranzactionSystem.Produs;
 import tranzactionSystem.ProdusComandat;
 
 public class IncarcareFisiere extends JFrame{
+	private JFrame frame;
+	
 	public IncarcareFisiere(String titlu){
 		super( titlu );
 		setResizable(false);
 		setSize(320, 445);
+		frame = this;
 		//setLayout (new FlowLayout ());
-		setDefaultCloseOperation ( JFrame . EXIT_ON_CLOSE );
+		//setDefaultCloseOperation ( JFrame . EXIT_ON_CLOSE );
 		
 		//Bordura
 		TitledBorder title ;
@@ -106,8 +109,11 @@ public class IncarcareFisiere extends JFrame{
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-				if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null)
+				if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
+				{
 					loadFiles();
+					frame.dispose();
+				}
 				else
 				{
 					String s = new String("");
@@ -125,7 +131,7 @@ public class IncarcareFisiere extends JFrame{
 		panel.add(btn4);
 	}
 	
-	private void loadFiles(){
+	static void loadFiles(){
 		File file;
 		Scanner input;	
 		Gestiune gestiune = Gestiune.getInstance();
@@ -257,7 +263,7 @@ public class IncarcareFisiere extends JFrame{
 			tipuri.add("MediumMarket");
 			tipuri.add("HyperMarket");
 			
-			Collections.sort(gestiune.tari);
+			//Collections.sort(gestiune.tari);
 			for( String tip : tipuri )
 			{
 				writer.println(tip);

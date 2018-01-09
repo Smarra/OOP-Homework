@@ -40,6 +40,9 @@ public class FereastraLogin extends JFrame{
 		setSize(420, 145);
 		frame = this;
 		
+		//**************************** DE STERS - Folosit pentru viteza de testare
+		IncarcareFisiere.loadFiles();
+		//*******************************
 		TitledBorder title ;
 		title = BorderFactory.createTitledBorder(" Login ");
 		JPanel panel = new JPanel(new GridLayout(4, 1));

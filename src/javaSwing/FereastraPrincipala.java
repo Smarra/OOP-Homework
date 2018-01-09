@@ -2,6 +2,9 @@ package javaSwing;
 
 import javax.swing.*;
 import javax.swing.border.*;
+
+import tranzactionSystem.Gestiune;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +40,16 @@ public class FereastraPrincipala extends JFrame {
 		});
 		panel.add( btn1 );
 		JButton btn2 = new JButton (" Afisare si administrare produse ");
+		btn2.addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	//if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
+		    		new AdministrareProduse("Afisare si Administrare Produse").setVisible(true);
+		    	//else
+		    	//	JOptionPane.showMessageDialog(null, "Fisierele nu sunt pregatite.");
+		    }
+		});
 		panel.add( btn2 );
 		JButton btn3 = new JButton (" Statistici ");
 		panel.add( btn3 );
