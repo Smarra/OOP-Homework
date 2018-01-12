@@ -28,4 +28,16 @@ public class Gestiune {
 		}
 		return false;
 	}
+	
+	public Produs getProdusByNameAndCountry( String name, String tara ){
+		for( Produs prod : produse )
+		{
+			if( prod.getDenumire().equals( name ) && prod.getTaraOrigine().equals( tara ))
+			{
+				System.out.println(prod);
+				return prod;
+			}
+		}
+		return null;
+	}
 }

@@ -35,27 +35,37 @@ import javax.swing.border.TitledBorder;
 import tranzactionSystem.Gestiune;
 import tranzactionSystem.Produs;
 
-public class StergeProdus extends JFrame {
+public class EditeazaProdus extends JFrame {
 	
 	JFrame frame;
 	JFrame parent;
 	JComboBox<String> dropList;
 	static File src;
 	
-	public StergeProdus( String titlu, JFrame par ){
+	JLabel dummy = new JLabel(" ");
+	
+	JTextField denumire = new JTextField("Denumire");
+	JTextField categorie = new JTextField("Categorie");
+	JTextField []preturi = new JTextField[ Gestiune.getInstance().tari.size() ];
+	
+	JLabel ldenumire = new JLabel("Denumire");
+	JLabel lcategorie = new JLabel("Categorie");
+	JLabel []lpreturi = new JLabel[ Gestiune.getInstance().tari.size() ];
+	
+	public EditeazaProdus( String titlu, JFrame par ){
 		
 		super( titlu );
 		setResizable(true);
-		setSize(320, 245);
+		setSize(420, 345);
 		frame = this;
 		parent = par;
 		
 		//Bordura
 		TitledBorder title ;
-		title = BorderFactory.createTitledBorder(" Sterge un produs ");
+		title = BorderFactory.createTitledBorder(" Editeaza un produs ");
 		
 		//Panel
-		JPanel panel = new JPanel(new GridLayout(6, 2));
+		JPanel panel = new JPanel(new GridLayout(7, 2));
 		panel.setPreferredSize (new Dimension (300 ,200) );
 		panel.setBackground ( Color.lightGray );
 		panel.setBorder ( title );
@@ -77,23 +87,73 @@ public class StergeProdus extends JFrame {
 		}
 		dropList = new JComboBox<>(lista);
 		dropList.setSelectedIndex(0);
-		//petList.addActionListener(this);
 		panel.add(dropList);
+		panel.add(dummy);
 		
-		JButton stergeProdus = new JButton("Sterge Produs");
-		panel.add(stergeProdus);
+		//Instantieri text fields
+		panel.add( ldenumire );
+		panel.add( denumire );
+		panel.add( lcategorie );
+		panel.add( categorie );
+		if( !Gestiune.getInstance().produse.isEmpty() )
+		{
+			Produs prod = Gestiune.getInstance().produse.get(0);
+			denumire.setText( prod.getDenumire());
+			categorie.setText( prod.getCategorie());
+			int j = 0;
+			for( String tara : Gestiune.getInstance().tari )
+			{
+				Produs pr = Gestiune.getInstance().produse.get(j);
+				lpreturi[j] = new JLabel( tara );
+				preturi[j] = new JTextField( "" + pr.getPret() );
+				panel.add( lpreturi[j] );
+				panel.add( preturi[j] );
+				j++;
+			}
+		}
 		
-		stergeProdus.addActionListener( new ActionListener()
+		dropList.addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	ArrayList<Produs> produseDeSters = new ArrayList<>();
-		    	for( Produs produs : Gestiune.getInstance().produse )
-		    		if( produs.getDenumire().equals(dropList.getSelectedItem()) )
-		    			produseDeSters.add(produs);
+				if( !Gestiune.getInstance().produse.isEmpty() )
+				{
+					Produs prod = Gestiune.getInstance().getProdusByNameAndCountry( dropList.getSelectedItem().toString(), 
+																Gestiune.getInstance().tari.get(0));
+					denumire.setText( prod.getDenumire());
+					categorie.setText( prod.getCategorie());
+					int j = 0;
+					for( String tara : Gestiune.getInstance().tari )
+					{
+						
+						Produs pr = Gestiune.getInstance().getProdusByNameAndCountry(prod.getDenumire(), tara);
+						System.out.println(pr);
+						preturi[j].setText( "" + pr.getPret() );
+						j++;
+					}
+				}
+		    }
+		});
+		
+		JButton editeazaProdus = new JButton("Editeaza Produs");
+		panel.add(editeazaProdus);
+		
+		editeazaProdus.addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	int i = 0;
+		    	for( String tara : Gestiune.getInstance().tari )
+		    	{
+		    		Produs prod = Gestiune.getInstance().getProdusByNameAndCountry( denumire.getText(), tara);
+		    		Gestiune.getInstance().produse.remove(prod);
+		    		prod.setPret( Double.parseDouble(preturi[i].getText()));
+		    		Gestiune.getInstance().produse.add(prod);
+		    		editFromFile( denumire.getText(), prod.getCategorie());
+		    		i++;
+		    	}
 
-		    	deleteFromFile( (String) dropList.getSelectedItem() );
-		    	Gestiune.getInstance().produse.removeAll(produseDeSters);
+		    	
     			parent.dispose();
 	    		frame.dispose();
 	    		new AdministrareProduse("Afisare si Administrare Produse").setVisible(true);
@@ -103,7 +163,7 @@ public class StergeProdus extends JFrame {
 		add(panel, BorderLayout.CENTER );
 	}
 	
-	void deleteFromFile( String produs ){
+	void editFromFile( String nume, String categorie ){
 		
 		File tempFile = new File("tempFile");
 		try{
@@ -113,10 +173,18 @@ public class StergeProdus extends JFrame {
 			while( scanner.hasNextLine() )
 			{
 				String line = scanner.nextLine();
-				if( !line.startsWith( produs ) )
+				if( !line.startsWith( nume ) )
 				{
 					//System.out.println(line);
 					writer.append(line + System.lineSeparator());
+				}
+				else
+				{
+					writer.append(denumire.getText() + " " + categorie);
+					int i = 0;
+					for( String tara : Gestiune.getInstance().tari )
+						writer.append( " " + preturi[i++].getText());
+					writer.append(System.lineSeparator());
 				}
 			}
 			writer.flush();

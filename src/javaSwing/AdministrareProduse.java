@@ -99,6 +99,13 @@ public class AdministrareProduse extends JFrame {
 		});
 		panel.add(btn2);
 		Button btn3 = new Button("Editeaza Produs");
+		btn3.addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	new EditeazaProdus("Editeaza Produs", frame).setVisible(true);
+		    }
+		});
 		panel.add(btn3);
 		Button btn4 = new Button("Cauta Produs");
 		panel.add(btn4);
