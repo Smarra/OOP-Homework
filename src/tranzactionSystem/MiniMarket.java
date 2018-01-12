@@ -11,22 +11,11 @@ public class MiniMarket extends Magazin{
 	public double calculScutiriTaxe(){
 		double total = getTotalCuTaxe();
 		
-		//Gasim lista tarilor 
-		ArrayList<String> tari = new ArrayList<>();
-		for( Factura fact : lista )
-			for( ProdusComandat prod : fact.lista )
-			{
-				String tara = prod.getProdus().getTaraOrigine();
-				if( !tari.contains(tara) )
-				{
-					tari.add(tara);
-				}
-			}
 		//Verificam totalul fiecarei 
-		for( String tara : tari )
+		for( String tara : Gestiune.getInstance().tari )
 		{
-			if( this.getTotalTaraCuTaxe(tara) > total/2 )
-				return 0;
+			if( this.getTotalTaraCuTaxe(tara) > (total/2) )
+				return 10;
 		}
 		return 0;
 	}

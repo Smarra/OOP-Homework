@@ -42,6 +42,7 @@ public class IncarcareFisiere extends JFrame{
 		//Bordura
 		TitledBorder title ;
 		title = BorderFactory.createTitledBorder(" Incarcare fisiere ");
+		
 		final JPanel panel = new JPanel();
 		panel.setPreferredSize (new Dimension (300 ,400) );
 		panel.setBackground ( Color.lightGray );
@@ -58,7 +59,6 @@ public class IncarcareFisiere extends JFrame{
 		    public void actionPerformed(ActionEvent e)
 		    {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-
 				int returnValue = jfc.showOpenDialog(null);
 				// int returnValue = jfc.showSaveDialog(null);
 
@@ -263,7 +263,9 @@ public class IncarcareFisiere extends JFrame{
 			tipuri.add("MediumMarket");
 			tipuri.add("HyperMarket");
 			
-			//Collections.sort(gestiune.tari);
+			ArrayList<String> newTariSortate = new ArrayList<>( gestiune.tari );
+			Collections.sort(newTariSortate);
+			
 			for( String tip : tipuri )
 			{
 				writer.println(tip);
@@ -275,16 +277,17 @@ public class IncarcareFisiere extends JFrame{
 						writer.println("Total " + magazin.getTotalFaraTaxe() + " " + magazin.getTotalCuTaxe() + " " + 
 										magazin.getTotalCuTaxeScutite() + "\n");
 						writer.println("Tara");
-						for( String tara : gestiune.tari )
+						for( String tara : newTariSortate )
 							writer.println(tara + " " + magazin.getTotalTaraFaraTaxe(tara) + " " +
 										magazin.getTotalTaraCuTaxe(tara) + " " + magazin.getTotalTaraCuTaxeScutite(tara));
 						writer.println();
+						Collections.sort( magazin.lista );
 						for( Factura fact : magazin.lista )
 						{
 							writer.println( fact.denumire + "\n");
 							writer.println( "Total " + fact.getTotalFaraTaxe() + " " + fact.getTotalCuTaxe() + "\n");
 							writer.println("Tara");
-							for( String tara : gestiune.tari )
+							for( String tara : newTariSortate )
 								writer.println(tara + " " + fact.getTotalTaraFaraTaxe(tara) + " " + fact.getTotalTaraCuTaxe(tara));
 							writer.println();
 						}

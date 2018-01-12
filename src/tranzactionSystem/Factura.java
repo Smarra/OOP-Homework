@@ -8,30 +8,30 @@ public class Factura implements Comparable<Object>{
 	public String denumire;
 	public Vector<ProdusComandat> lista = new Vector<ProdusComandat>();
 	
-	DecimalFormat df = new DecimalFormat("#,####");
+	DecimalFormat df = new DecimalFormat("#.####");
 	{
 		df.setRoundingMode(RoundingMode.CEILING);
 	}
 	
 	public double getTotalFaraTaxe(){
-		double total = 0;
+		Double total = 0.0;
 		for( ProdusComandat prod : lista )
 			total += prod.getProdus().getPret() * prod.getCantitate();
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public double getTotalCuTaxe(){
 		double total = 0;
 		for( ProdusComandat prod : lista )
 			total += prod.getProdus().getPret() * prod.getCantitate() * ( 100 + prod.getTaxa() )/100;
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public double getTaxe(){
 		double total = 0;
 		for( ProdusComandat prod : lista )
 			total += prod.getTaxa();
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public double getTotalTaraFaraTaxe(String tara){
@@ -39,7 +39,7 @@ public class Factura implements Comparable<Object>{
 		for( ProdusComandat prod : lista )
 			if( prod.getProdus().getTaraOrigine().compareTo(tara) == 0 )
 				total += prod.getProdus().getPret() * prod.getCantitate();
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public double getTotalTaraCuTaxe(String tara){
@@ -47,7 +47,23 @@ public class Factura implements Comparable<Object>{
 		for( ProdusComandat prod : lista )
 			if( prod.getProdus().getTaraOrigine().compareTo(tara) == 0 )
 				total += prod.getProdus().getPret() * prod.getCantitate() * ( 100 + prod.getTaxa() )/100;
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
+	}
+	
+	public double getTotalCategorieFaraTaxe(String categorie){
+		double total = 0;
+		for( ProdusComandat prod : lista )
+			if( prod.getProdus().getCategorie().compareTo(categorie) == 0 )
+				total += prod.getProdus().getPret() * prod.getCantitate();
+		return Double.valueOf(df.format(total).replace(',', '.'));
+	}
+	
+	public double getTotalCategorieCuTaxe(String categorie){
+		double total = 0;
+		for( ProdusComandat prod : lista )
+			if( prod.getProdus().getCategorie().compareTo(categorie) == 0 )
+				total += prod.getProdus().getPret() * prod.getCantitate() * ( 100 + prod.getTaxa() )/100;
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public double getTaxeTara(String tara){
@@ -55,7 +71,7 @@ public class Factura implements Comparable<Object>{
 		for( ProdusComandat prod : lista )
 			if( prod.getProdus().getTaraOrigine().compareTo(tara) == 0 )
 				total += prod.getTaxa();
-		return Double.parseDouble(df.format(total));
+		return Double.valueOf(df.format(total).replace(',', '.'));
 	}
 	
 	public String toString(){

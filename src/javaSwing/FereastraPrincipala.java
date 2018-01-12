@@ -44,14 +44,24 @@ public class FereastraPrincipala extends JFrame {
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		    	//if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
+		    	if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
 		    		new AdministrareProduse("Afisare si Administrare Produse").setVisible(true);
-		    	//else
-		    	//	JOptionPane.showMessageDialog(null, "Fisierele nu sunt pregatite.");
+		    	else
+		    		JOptionPane.showMessageDialog(null, "Fisierele nu sunt pregatite.");
 		    }
 		});
 		panel.add( btn2 );
 		JButton btn3 = new JButton (" Statistici ");
+		btn3.addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		    	if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
+		    		new FereastraStatistici("Statistici").setVisible(true);
+		    	else
+		    		JOptionPane.showMessageDialog(null, "Fisierele nu sunt pregatite.");
+		    }
+		});
 		panel.add( btn3 );
 	}
 }

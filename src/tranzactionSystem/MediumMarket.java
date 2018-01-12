@@ -16,7 +16,7 @@ public class MediumMarket extends Magazin{
 		for( Factura fact : lista )
 			for( ProdusComandat prod : fact.lista )
 			{
-				String categorie = prod.getProdus().getTaraOrigine();
+				String categorie = prod.getProdus().getCategorie();
 				if( !categorii.contains(categorie) )
 				{
 					categorii.add(categorie);
