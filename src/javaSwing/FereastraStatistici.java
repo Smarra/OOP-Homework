@@ -5,13 +5,18 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,22 +41,46 @@ import tranzactionSystem.Produs;
 import tranzactionSystem.ProdusComandat;
 
 public class FereastraStatistici extends JFrame{	
+	
+	BufferedImage image;
+	
 	public FereastraStatistici(String titlu){
 		super( titlu );
 		setResizable(true);
-		setSize(420, 745);
-		
+		setSize(420, 645);
 		setVisible(true);
+		
+		//Creeaza background
+		try{
+			image = ImageIO.read(new File( Gestiune.backgroundFilePath ));
+		}catch( IOException e){
+			e.printStackTrace();
+		}
+		
+		//Panel
+		JPanel panel = new JPanel(){
+            @Override
+			public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(image, 0, 0, null);
+            }
+		};
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		
+		//Centreaza fereastra principala
+	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+	    int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+	    setLocation(x, y);
+		
+		//Border
 		TitledBorder title ;
 		title = BorderFactory.createTitledBorder(" Adauga un produs ");
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.setPreferredSize (new Dimension (400 ,300) );
 		panel.setBackground ( Color.lightGray );
 		panel.setBorder ( title );
 		
 		//Afisam pe rand fiecare statistica ceruta de enunt
-		//1. Magazinul cu cele mai mari vanzari
+		//1. Magazinul cu cele mai mari vanzari	
 		JLabel jl1 = new JLabel(" 1. Magazinul cu cele mai mari vanzari este: ");
 		JLabel jl2 = null;
 		Double bestPrice = new Double(-1);
@@ -145,7 +174,6 @@ public class FereastraStatistici extends JFrame{
 		{
 			for( Factura factura : magazin.lista )
 			{
-				System.out.println(factura);
 				if( maxim < factura.getTotalFaraTaxe() )
 					maxim = factura.getTotalFaraTaxe();
 			}
@@ -160,7 +188,10 @@ public class FereastraStatistici extends JFrame{
 		}
 		panel.add(jl);
 		
-		// Adauga panel-ul la layout
-		add(panel);
+		// Adauga panel-ul la un ScrollPane, pe care il adaug la frame-ul principal
+		JScrollPane pane = new JScrollPane(panel,
+	            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+	            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		add(pane);
 	}
 }

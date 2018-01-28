@@ -9,9 +9,13 @@ public class Gestiune {
 	public ArrayList<Magazin> magazine = new ArrayList<>();
 	public ArrayList<String> tari = new ArrayList<>();
 	public TreeMap<String, TreeMap<String, Double>> taxe = new TreeMap<>();
-	public static File fProduse = new File("C:\\Users\\Smara\\Desktop\\produse.txt");
-	public static File fFacturi = new File("C:\\Users\\Smara\\Desktop\\facturi.txt");
-	public static File fTaxe = new File("C:\\Users\\Smara\\Desktop\\taxe.txt");
+
+	public static boolean filesLoaded = false;
+	public static String backgroundFilePath = "rsz_9_4_2500.jpg";
+	public static File fProduse = null;
+	public static File fFacturi = null;
+	public static File fTaxe = null;
+	
 	
 	private Gestiune(){}
 	

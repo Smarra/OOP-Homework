@@ -27,8 +27,6 @@ public class MainActivity {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
 		
-		new FereastraLogin("Login").setVisible(true);
-		//new FereastraPrincipala("maind").show();
-		
+		new FereastraLogin("Login").setVisible(true);		
 	}
 }

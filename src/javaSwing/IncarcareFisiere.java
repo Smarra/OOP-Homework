@@ -1,10 +1,16 @@
 package javaSwing;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +18,15 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileSystemView;
 
@@ -29,47 +38,79 @@ import tranzactionSystem.Produs;
 import tranzactionSystem.ProdusComandat;
 
 public class IncarcareFisiere extends JFrame{
+	
 	private JFrame frame;
+	JProgressBar progressBar = null;
+	boolean ok1 = false, ok2 = false, ok3 = false;
+	BufferedImage image;
 	
 	public IncarcareFisiere(String titlu){
 		super( titlu );
 		setResizable(false);
 		setSize(320, 445);
 		frame = this;
-		//setLayout (new FlowLayout ());
-		//setDefaultCloseOperation ( JFrame . EXIT_ON_CLOSE );
+		
+		//Creeaza background
+		try{
+		image = ImageIO.read(new File(Gestiune.backgroundFilePath));
+		}catch( IOException e){
+			e.printStackTrace();
+		}
+		
+		//Panel
+		final JPanel panel = new JPanel( new GridLayout(10, 1)){
+            @Override
+			public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(image, 0, 0, null);
+            }
+		};
+		panel.setPreferredSize (new Dimension (100 ,100) );
+		panel.setBackground ( Color.lightGray );
+		
+		//Centreaza fereastra principala
+	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+	    int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+	    setLocation(x, y);
 		
 		//Bordura
 		TitledBorder title ;
 		title = BorderFactory.createTitledBorder(" Incarcare fisiere ");
-		
-		final JPanel panel = new JPanel();
-		panel.setPreferredSize (new Dimension (300 ,400) );
-		panel.setBackground ( Color.lightGray );
 		panel.setBorder ( title );
 		add( panel );
 		
-		//Gestiune
-		Gestiune gestiune = Gestiune.getInstance();
+		//ProgressBar
+		progressBar = new JProgressBar();
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
 		
 		//Butoane de incarcare pentru fiecare fisier
 		JButton btn1 = new JButton (" Incarca produse ");
+		panel.add( btn1 );
 		btn1.addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 				int returnValue = jfc.showOpenDialog(null);
-				// int returnValue = jfc.showSaveDialog(null);
 
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = jfc.getSelectedFile();
 					Gestiune.fProduse = new File(selectedFile.getAbsolutePath());
+					if( ok1 == false )
+					{
+						progressBar.setValue( progressBar.getValue() + 33 );
+						if( progressBar.getValue() == 99 )
+							progressBar.setValue( 100 );
+						ok1 = true;
+					}
 				}
 		    }
 		});
-		panel.add( btn1 );
+		
 		JButton btn2 = new JButton (" Incarca taxe ");
+		panel.add( btn2 );
 		btn2.addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
@@ -77,34 +118,47 @@ public class IncarcareFisiere extends JFrame{
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 				int returnValue = jfc.showOpenDialog(null);
-				// int returnValue = jfc.showSaveDialog(null);
 
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = jfc.getSelectedFile();
 					Gestiune.fTaxe = new File(selectedFile.getAbsolutePath());
+					if( ok2 == false )
+					{
+						progressBar.setValue( progressBar.getValue() + 33 );
+						if( progressBar.getValue() == 99 )
+							progressBar.setValue( 100 );
+						ok2 = true;
+					}
 				}
 		    }
 		});
-		panel.add( btn2 );
+		
 		JButton btn3 = new JButton (" Incarca facturi ");
+		panel.add( btn3 );
 		btn3.addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-
 				int returnValue = jfc.showOpenDialog(null);
-				// int returnValue = jfc.showSaveDialog(null);
 
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = jfc.getSelectedFile();
 					Gestiune.fFacturi = new File(selectedFile.getAbsolutePath());
+					if( ok3 == false )
+					{
+						progressBar.setValue( progressBar.getValue() + 33 );
+						if( progressBar.getValue() == 99 )
+							progressBar.setValue( 100 );
+						ok3 = true;
+					}
 				}
 		    }
 		});
-		panel.add( btn3 );
 		
-		JButton btn4 = new JButton (" Apasa ");
+		
+		JButton btn4 = new JButton (" Actualizeaza baza de date ");
+		panel.add(btn4);
 		btn4.addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
@@ -112,6 +166,7 @@ public class IncarcareFisiere extends JFrame{
 				if( Gestiune.fFacturi != null && Gestiune.fProduse != null && Gestiune.fTaxe != null )
 				{
 					loadFiles();
+					Gestiune.filesLoaded = true;
 					frame.dispose();
 				}
 				else
@@ -128,7 +183,14 @@ public class IncarcareFisiere extends JFrame{
 				}
 		    }
 		});
-		panel.add(btn4);
+		
+		
+		//Creare dummy pentru spatiere
+		JLabel dummy = new JLabel("");
+		panel.add(dummy);
+		
+		//Adaugare ProgressBar la panel
+		panel.add(progressBar);
 	}
 	
 	static void loadFiles(){

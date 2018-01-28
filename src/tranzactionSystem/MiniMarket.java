@@ -10,8 +10,6 @@ public class MiniMarket extends Magazin{
 
 	public double calculScutiriTaxe(){
 		double total = getTotalCuTaxe();
-		
-		//Verificam totalul fiecarei 
 		for( String tara : Gestiune.getInstance().tari )
 		{
 			if( this.getTotalTaraCuTaxe(tara) > (total/2) )

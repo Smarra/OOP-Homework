@@ -3,9 +3,12 @@ package javaSwing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,6 +45,7 @@ public class EditeazaProdus extends JFrame {
 	JFrame parent;
 	JComboBox<String> dropList;
 	static File src;
+	BufferedImage image;
 	
 	JLabel dummy = new JLabel(" ");
 	
@@ -60,12 +65,31 @@ public class EditeazaProdus extends JFrame {
 		frame = this;
 		parent = par;
 		
+		//Creeaza background
+		try{
+			image = ImageIO.read(new File( Gestiune.backgroundFilePath ));
+		}catch( IOException e){
+			e.printStackTrace();
+		}
+		
+		//Centreaza fereastra principala
+	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+	    int x = (int) ((dimension.getWidth() - getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - getHeight()) / 2);
+	    setLocation(x, y);
+		
 		//Bordura
 		TitledBorder title ;
 		title = BorderFactory.createTitledBorder(" Editeaza un produs ");
 		
 		//Panel
-		JPanel panel = new JPanel(new GridLayout(7, 2));
+		JPanel panel = new JPanel(new GridLayout(7, 2)){
+            @Override
+			public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(image, 0, 0, null);
+            }
+		};
 		panel.setPreferredSize (new Dimension (300 ,200) );
 		panel.setBackground ( Color.lightGray );
 		panel.setBorder ( title );
@@ -148,6 +172,7 @@ public class EditeazaProdus extends JFrame {
 		    		Produs prod = Gestiune.getInstance().getProdusByNameAndCountry( denumire.getText(), tara);
 		    		Gestiune.getInstance().produse.remove(prod);
 		    		prod.setPret( Double.parseDouble(preturi[i].getText()));
+		    		prod.setCategorie( categorie.getText() );
 		    		Gestiune.getInstance().produse.add(prod);
 		    		editFromFile( denumire.getText(), prod.getCategorie());
 		    		i++;
